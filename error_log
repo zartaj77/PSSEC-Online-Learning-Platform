@@ -1,0 +1,57 @@
+[20-Apr-2020 07:04:09 UTC] PHP Fatal error:  Call to undefined function mb_htmlentities() in /home2/anomozco/projects.anomoz.com/pssec/register.php on line 5
+[20-Apr-2020 07:06:34 UTC] PHP Fatal error:  Call to undefined function mb_htmlentities() in /home2/anomozco/projects.anomoz.com/pssec/register.php on line 7
+[20-Apr-2020 07:06:42 UTC] PHP Fatal error:  Call to undefined function mb_htmlentities() in /home2/anomozco/projects.anomoz.com/pssec/register.php on line 8
+[20-Apr-2020 07:06:52 UTC] PHP Fatal error:  Call to undefined function mb_htmlentities() in /home2/anomozco/projects.anomoz.com/pssec/register.php on line 7
+[20-Apr-2020 07:07:14 UTC] PHP Fatal error:  Call to undefined function mb_htmlentities() in /home2/anomozco/projects.anomoz.com/pssec/register.php on line 7
+[20-Apr-2020 07:19:13 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 07:21:10 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 07:22:34 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 07:22:38 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 07:22:41 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 07:22:44 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 07:51:34 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 08:02:27 UTC] PHP Warning:  include_once(./allowAdminTeacher.php): failed to open stream: No such file or directory in /home2/anomozco/projects.anomoz.com/pssec/newCourse.php on line 3
+[20-Apr-2020 08:02:27 UTC] PHP Warning:  include_once(): Failed opening './allowAdminTeacher.php' for inclusion (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home2/anomozco/projects.anomoz.com/pssec/newCourse.php on line 3
+[20-Apr-2020 08:05:00 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 08:05:01 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 08:05:10 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 08:05:10 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 08:05:17 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 16:31:16 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 16:31:20 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[20-Apr-2020 16:31:21 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 06:37:51 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 06:38:05 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 06:38:12 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 06:38:16 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 07:31:33 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 07:32:13 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 07:32:16 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 07:32:22 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 07:32:27 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 07:32:33 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 07:32:35 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 07:32:40 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 08:06:00 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 08:06:02 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 08:06:05 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 08:06:08 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 08:11:14 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 08:12:34 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 08:12:37 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 08:12:44 UTC] PHP Warning:  mysqli::query(): Empty query in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 15
+[21-Apr-2020 08:52:43 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 08:53:03 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 08:53:10 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 08:54:28 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 08:54:41 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 08:55:55 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 08:59:08 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 08:59:34 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 09:00:44 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 09:01:09 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 09:01:27 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 09:01:35 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 09:03:32 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 09:03:42 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
+[21-Apr-2020 09:04:30 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, null given in /home2/anomozco/projects.anomoz.com/pssec/global.php on line 61
