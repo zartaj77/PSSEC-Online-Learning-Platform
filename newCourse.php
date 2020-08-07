@@ -65,30 +65,62 @@ if(isset($_POST['title'])&&isset($_POST['abstract'])){
         $title = mb_htmlentities(($_POST['title']));
         $abstract = mb_htmlentities(($_POST['abstract']));
         $author_id = mb_htmlentities($session_id);
+        $degree = mb_htmlentities($_POST['degree']);
+        $departments = ($_POST['departments']);
         $timeAdded = time();
-
-        $sql="insert into pssec_courses (`id`, `title`,`abstract`, `cover`, `timeAdded`, `instructor_id`) values ('$courseId', '$title', '$abstract', '$fileName_db', '$timeAdded', '$author_id')";
+        
+        $query_notf_recp= "select * from pssec_users"; 
+        $result_notf_recp = $con->query($query_notf_recp); 
+        if ($result_notf_recp->num_rows > 0)
+        { 
+            //successfull login
+            while($row = $result_notf_recp->fetch_assoc()) 
+            { 
+                $temp_student = $row['id'];
+                $sql="insert into pssec_notifications(`studentId`, `content`, `timeAdded`, `url`) values ('$temp_student', 'New course $title added by $session_name', '$timeAdded', './')";
+                if(!mysqli_query($con,$sql)){echo "err2";} 
+            }
+        }
+        
+        givePoints($con, "New course $title", $session_id, '30');
+     
+        foreach ($_POST['departments'] as $selectedOption){
+            $sql="insert into pssec_courseDepartments (`courseId`, `depId`, `timeAdded`) values ('$courseId', '$selectedOption', '$timeAdded')";
+            if(!mysqli_query($con,$sql))
+            {
+                echo "err";
+            }
+        }
+    
+        
+        
+        
+        
+        $sql="insert into pssec_courses (`id`, `title`,`abstract`, `cover`, `timeAdded`, `instructor_id`, `university`, `degree`, `portion`) values ('$courseId', '$title', '$abstract', '$fileName_db', '$timeAdded', '$author_id', '$session_university', '$degree', '$session_portion')";
         if(!mysqli_query($con,$sql))
         {
             echo "err";
         }else{
             ?>
             <script type="text/javascript">
-                window.location = "./courseContent.php?courseId=<?echo $courseId?>";
+                window.location = "./courseContent.php?courseId=<?echo $courseId?>&courseCreated=1";
             </script>
             <?
         }
+        
+        
+        
+        
     }
-
-
-    
-    
-    
 }
 else{
     //do nothing
     1;
 }
+
+
+$query_departments= "SELECT * FROM `pssec_departments` where university='$session_university'"; 
+$result_departments = $con->query($query_departments); 
 
 
 ?>
@@ -118,9 +150,9 @@ else{
               <h6 class="h2 text-white d-inline-block mb-0">New Course</h6>
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                  <li class="breadcrumb-item active"><a href="./"><i class="fas fa-home"></i></a></li>
+                  
                  
-                  <li class="breadcrumb-item"><a href="./">Courses</a></li>
+                  
                   <li class="breadcrumb-item active" aria-current="page">New Course</li>
                   
                 </ol>
@@ -152,6 +184,7 @@ else{
             </div>
             <div class="card-body">
                 
+
                   <div class="form-group">
                     <label for="exampleFormControlInput1">Title</label>
                     <input type="text" name="title" class="form-control" id="exampleFormControlInput1" placeholder="Course Title" required>
@@ -159,7 +192,7 @@ else{
 
                   <div class="form-group">
                     <label for="exampleFormControlTextarea1">Abstract</label>
-                    <textarea name="abstract" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+                    <textarea name="abstract" class="form-control" id="exampleFormControlTextarea1" rows="3" required maxlength="500"></textarea>
                   </div>
                   
                   
@@ -170,6 +203,41 @@ else{
                     </div>
                   </div>
                   
+                  
+                  <?if($session_portion=="University"){?>
+                      <div class="form-group row">
+                        
+                        <div class="col-md-6">
+                            
+                        <label for="exampleFormControlInput1">Select all applicable departments (<a href="./add_department.php">Add new</a>)</label>
+                        <select multiple class="form-control" id="exampleFormControlSelect2" name="departments[]" required>
+                            <?if ($result_departments->num_rows > 0)
+                                { 
+                                    //successfull login
+                                    while($row = $result_departments->fetch_assoc()) 
+                                    { ?> 
+                          <option value="<?echo $row['id']?>"><?echo $row['depName']?></option>
+                          <?}}?>
+                        </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                            
+                            
+                        <label for="exampleFormControlInput1">Select Degree</label>
+                        <select class="form-control" id="exampleFormControlSelect2" name="degree" required>
+                            
+                          <option value="BS">BS</option>
+                          <option value="MS">MS</option>
+                          <option value="BE">BE</option>
+                          <option value="M.Phil">M.Phil</option>
+                          <option value="PHD">PHD</option>
+                        </select>
+                            </div>
+                            
+                            
+                        </div>
+                  <?}?>
            
             </div>
           </div>

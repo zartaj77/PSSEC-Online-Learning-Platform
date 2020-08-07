@@ -2,6 +2,21 @@
 include_once("./global.php");
 include_once("./phpParts/auth/allowAdminTeacherStudent.php");
 
+
+if(isset($_GET['hide'])){
+    $id = $_GET['hide'];
+    $sql="update pssec_courses set isHidden=1 where id='$id'";
+                if(!mysqli_query($con,$sql)){echo "err2";} 
+}
+
+if(isset($_GET['show'])){
+    $id = $_GET['show'];
+    $sql="update pssec_courses set isHidden=0 where id='$id'";
+                if(!mysqli_query($con,$sql)){echo "err2";} 
+}
+
+
+
 if($session_role == "student"){
     $query_courses= "select c.title, c.id from pssec_courses c inner join pssec_enrollment e on c.id=e.courseId where e.studentId='$session_id' "; 
     $result_courses = $con->query($query_courses); 
@@ -10,6 +25,8 @@ if($session_role == "admin" || $session_role == "teacher"){
     $query_courses= "select * from pssec_courses c where c.instructor_id='$session_id' "; 
     $result_courses = $con->query($query_courses); 
 }
+
+givePoints($con, "My Courses", $session_id, '10');
 
 
 
@@ -42,9 +59,9 @@ if($session_role == "admin" || $session_role == "teacher"){
               <h6 class="h2 text-white d-inline-block mb-0"><?echo $courseTitle?></h6>
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                  <li class="breadcrumb-item active"><a href="./"><i class="fas fa-home"></i></a></li>
+                  
                  
-                  <li class="breadcrumb-item"><a href="./">Courses</a></li>
+                  
                   <li class="breadcrumb-item active" aria-current="page">My Courses</li>
                   
                 </ol>
@@ -80,7 +97,7 @@ if($session_role == "admin" || $session_role == "teacher"){
                 <thead class="thead-light">
                   <tr>
                     <th scope="col" class="sort" data-sort="name">Course</th>
-                    <th scope="col" class="sort" style="width:10%;">Action</th>
+                    <th scope="col" class="sort" style="width:<?if($session_role=="student"){echo "10";}else{echo "20";}?>%;">Action</th>
                   </tr>
                 </thead>
                 <tbody class="list">
@@ -101,6 +118,14 @@ if($session_role == "admin" || $session_role == "teacher"){
                     </th>
                     <td>
                         <a class="btn btn-primary" href="./courseContent.php?courseId=<?echo $row['id']?>">View</a>
+                        <?if($session_role!="student"){?>
+                            <?if($row['isHidden']==1){?>
+                            <a class="btn btn-success" href="./admin_courses.php?show=<?echo $row['id']?>">Show</a>
+                            <?}else{?>
+                            <a class="btn btn-warning" href="./admin_courses.php?hide=<?echo $row['id']?>">Hide</a>
+                            <?}?>
+                    <?}?>
+                        
                     </td>
                   </tr>
                   <?}

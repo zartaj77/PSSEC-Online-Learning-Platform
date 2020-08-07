@@ -35,15 +35,40 @@ else{
 <html>
 
 <head>
-  <?include_once("./phpParts/header.php")?>
+  <?include_once("./phpParts/header.php"); ?>
+  
+  <style>
+  
+        .bg-default{
+            /**
+            background:url("./assets/img/<?if($session_portion=="University"){echo "uni";}else{echo "school";}?>_login.jpg") no-repeat fixed !important;
+            background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: left top !important;
+    
+    **/
+    background-color: red;
+background-image: url("./assets/img/<?if($session_portion=="University"){echo "uni";}else{echo "school";}?>_login.jpg");
+background-size: cover;
+background-attachment: fixed;
+height: 100vh;
+
+            
+        }
+        
+      .bg-gradient-primary{
+          background: #f0f8ff00 !important;
+      }
+  </style>
+  
 </head>
 
 <body class="bg-default">
-  <!-- Navbar -->
+  <!-- Navbar 
   <nav id="navbar-main" class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
     <div class="container">
       <a class="navbar-brand" href="./">
-        <h3 style="font-size: 30px;color: white;">PSSEC</h3>
+        <h3 style="font-size: 30px;color: white;"><img src="assets/img/uni_logo.png" style="max-height: 60px;background-color: #d4daff;border-radius: 1000px;padding:1px;" class="navbar-brand-img" alt="Logo"></h3>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -85,10 +110,12 @@ else{
       </div>
     </div>
   </nav>
+  -->
   <!-- Main content -->
   <div class="main-content">
     <!-- Header -->
     <div class="header bg-gradient-primary py-7 py-lg-8 pt-lg-9" style="padding-bottom:5rem!important;padding-top:8rem!important;">
+        <!--
       <div class="container">
         <div class="header-body text-center mb-7">
           <div class="row justify-content-center">
@@ -99,11 +126,14 @@ else{
           </div>
         </div>
       </div>
+      -->
+      <!--
       <div class="separator separator-bottom separator-skew zindex-100">
         <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
         </svg>
       </div>
+      -->
     </div>
     <!-- Page content -->
     <div class="container mt--8 pb-5">
@@ -112,6 +142,11 @@ else{
         <div class="col-lg-6 col-md-8">
           <div class="card bg-secondary border-0">
             <div class="card-body px-lg-5 py-lg-5">
+                
+            
+                
+                <img src="assets/img/uni_logo.png" style="margin: 10px;max-height: 50px;padding:1px;margin: 10px auto;justify-content: center;display: grid;" class="navbar-brand-img" alt="Logo">
+                
               <form role="form" method="post" action="">
                 <div class="form-group">
                   <div class="input-group input-group-merge input-group-alternative mb-3">
@@ -129,10 +164,34 @@ else{
                     <input class="form-control" placeholder="Password" type="password" required name="password">
                   </div>
                 </div>
+                
+                
+                <div class="row my-4">
+                    
+                  <div class="col-6">
+                    <div class="custom-control custom-control-alternative custom-checkbox">
+                      <input class="custom-control-input" id="customCheckRegister" type="checkbox" >
+                      <label class="custom-control-label" for="customCheckRegister">
+                        <span class="text-muted">Stay signed in</span>
+                      </label>
+                      <br>
+                      <a href="./forget_password.php">Forgot Password?</a>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                     <input type="submit" class="btn btn-primary mt-4" value="Login" style="margin-top: 0px !important;float: right;">
+                  </div>
+                </div>
+                
                
                 <div class="text-center">
-                  <input type="submit" class="btn btn-primary mt-4" value="Login">
+                    <br>
+                    <a href="./register.php">Signup</a> | <a href="./?guest">Welcome Tour</a>
                 </div>
+                
+                <a href="https://www.pssecm2m.com/" style="justify-content: center;display: grid;">
+                <img src="https://pssecm2m.com/wp-content/uploads/2020/04/PSSEC-LOGO.png" style="margin: 10px;max-height: 50px;border-radius: 1000px;padding:1px;" class="navbar-brand-img text-center" alt="Logo">
+                </a>
               </form>
             </div>
           </div>

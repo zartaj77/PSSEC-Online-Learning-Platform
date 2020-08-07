@@ -1,6 +1,8 @@
 <?include_once("./global.php");
 
-if(isset($_GET['logout'])){
+
+if(isset($_GET['switch-experience'])){
+    givePoints($con, "switch-experience", $session_id, '10');
     session_destroy();
     $logged=0;
     ?>
@@ -10,8 +12,90 @@ if(isset($_GET['logout'])){
     <?
 }
 
-$query_courses= "select c.id, c.title, c.cover, u.name, e.id as 'isEnroll' from pssec_courses c inner join pssec_users u on c.instructor_id=u.id left outer join pssec_enrollment e on e.courseID=c.id and e.studentId='$session_id'"; 
+if(isset($_GET['logout'])){
+    givePoints($con, "logout", $session_id, '10');
+    session_destroy();
+    $logged=0;
+    ?>
+    <script type="text/javascript">
+            window.location = "./";
+        </script>
+    <?
+}
+
+if(isset($_GET['change-bot'])){
+    $bot = $_GET['change-bot'];
+    $sql="update pssec_users set bot='$bot' where id='$session_id'";
+                if(!mysqli_query($con,$sql)){echo "notf err2";}else{
+                    $session_bot = $bot;
+                }
+    
+    
+}
+
+
+if(isset($_GET['experience'])){
+    $_SESSION['portion'] = $_GET['experience'];
+    ?>
+    <script type="text/javascript">
+            window.location = "./login.php";
+        </script>
+    <?
+}
+
+//$_SESSION['portion'] = '';
+
+
+givePoints($con, "Visited Homepage", $session_id, '10');
+
+if(isset($_GET['department']) || $_SESSION['departmentExplore']!=''){
+    $_SESSION['explored'] = "yes";
+    $depId = $_GET['department'];
+    $_SESSION['departmentExplore'] = $depId;
+    $depId = $_SESSION['departmentExplore'];
+    
+    $query_courses= "select c.abstract, c.university, c.id, c.title, c.cover, u.name, e.id as 'isEnroll' from pssec_courses c inner join pssec_users u on c.instructor_id=u.id left outer join pssec_enrollment e on e.courseID=c.id left outer join pssec_courseDepartments cd on cd.courseId=c.id where c.isHidden!=1 and e.studentId='$session_id' and cd.depId='$depId' order by c.timeAdded desc"; 
+}else{
+    if($session_role=='student'){
+        $query_courses= "select c.abstract, c.university, c.id, c.title, c.cover, u.name, e.id as 'isEnroll' from pssec_courses c inner join pssec_users u on c.instructor_id=u.id left outer join pssec_enrollment e on e.courseID=c.id where c.isHidden!=1 and e.id!='' and e.studentId='$session_id' order by c.timeAdded desc"; 
+    }else{
+        $query_courses= "select c.abstract, c.university, c.id, c.title, c.cover, u.name, e.id as 'isEnroll' from pssec_courses c inner join pssec_users u on c.instructor_id=u.id left outer join pssec_enrollment e on e.courseID=c.id where c.isHidden!=1 and c.instructor_id='$session_id' group by c.id  order by c.timeAdded desc"; 
+    }
+        
+}
 $result_courses = $con->query($query_courses); 
+
+if($session_portion=="University"){
+    $query_departments= "SELECT * FROM `pssec_departments` where portion='$session_portion'"; 
+}else{
+    $query_departments= "SELECT * FROM `pssec_courses` where portion='$session_portion'";    
+}
+$result_departments = $con->query($query_departments); 
+
+$askToExplore = 1;
+if(($logged==1 || $_SESSION['explored']=="yes")){
+    $askToExplore = 0;
+}
+
+
+$todayDate = date("Y-m-d");
+//upcomming quizes
+$query_upcommingQuizes = "SELECT t.id, t.title, q.quiz_category, q.deadline, e.studentId FROM `pssec_quizzes` q 
+INNER join pssec_topics t on q.topic_id=t.id INNER join pssec_courses c on c.id=t.courseId inner join pssec_enrollment e 
+on e.courseId=c.id where  e.studentId='$session_id' and q.deadline!='' and TIMESTAMPDIFF(SECOND, q.deadline, '$todayDate')<0 group by q.topic_id";
+$result_upcommingQuizes = $con->query($query_upcommingQuizes); 
+
+//quiz feedback
+$query_quizFeedback = "SELECT q.quiz_weight, q.quiz_category ,s.topic_id, u.id, s.isCorrect, t.title, sum(s.isCorrect) / count(u.id) as scorePercent 
+FROM `pssec_quiz_submission` s inner join pssec_users u on s.studentId=u.id inner join pssec_topics t on t.id=s.topic_id inner 
+join pssec_quizzes q on q.topic_id=s.topic_id where u.id='$session_id' GROUP by s.topic_id";
+$result_quizFeedback = $con->query($query_quizFeedback); 
+
+//not enrolled courses
+$query_notEnrolled= "select c.abstract, c.university, c.id, c.title, c.cover, u.name, e.id as 'isEnroll' from pssec_courses c inner join pssec_users u on c.instructor_id=u.id left outer join pssec_enrollment e on e.courseID=c.id and e.studentId='$session_id' where c.portion='$session_portion' and c.isHidden!=1 and e.id is null order by c.timeAdded desc"; 
+$result_notEnrolled = $con->query($query_notEnrolled); 
+
+
 
 ?>
 <!DOCTYPE html>
@@ -19,11 +103,17 @@ $result_courses = $con->query($query_courses);
 
 <head>
   <?include_once("./phpParts/header.php")?>
+  
 </head>
 
 <body>
   <!-- Sidenav -->
-  <?include_once("./phpParts/sidenav.php")?>
+  <?
+  if($logged==1){
+  include_once("./phpParts/sidenav.php");
+  }
+  
+  ?>
   <!-- Main content -->
   <div class="main-content" id="panel">
     <!-- Topnav -->
@@ -34,13 +124,18 @@ $result_courses = $con->query($query_courses);
       <div class="container-fluid">
         <div class="header-body">
           <div class="row align-items-center py-4">
+              
             <div class="col-lg-6 col-7">
-              <h6 class="h2 text-white d-inline-block mb-0">Courses</h6>
-              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
-                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                  <li class="breadcrumb-item active"><a href="#"><i class="fas fa-home"></i></a></li>
-                </ol>
-              </nav>
+                
+                <?if(($askToExplore==1 && $session_portion!='') || ($session_role=="uniadmin") || ($session_portion=='')){?>
+                
+                
+              <h6 class="h2 text-white d-inline-block mb-0">
+                  <?if($askToExplore==1 && $session_portion!=''){echo "What would you like to Explore?";}else if($session_role=="uniadmin"){echo"Kindly, contact Admin for getting Admin Access to the Grade Scale Panel";}else if($session_portion==''){echo "Choose Your Experience";}?>
+                  
+                  </h6>
+                  
+                  <?}?>
             </div>
             <?if($session_role=="admin" || $session_role=="teacher"){?>
                 <div class="col-lg-6 col-5 text-right">
@@ -49,59 +144,48 @@ $result_courses = $con->query($query_courses);
             <?}?>
             
           </div>
+          
+          <?if($askToExplore==1 && $session_portion!=''){
+          ?>
+                    <div class="col-xl-12 col-md-12">
+                        <input type="text" id="searchQuery_dep" onkeyup="searchQuery_dep()" name="department" class="form-control form-control-alternative" placeholder="Search your department">
+                    </div>
+          <?}?>
+          
+          <?if($session_studentId=='' && $session_semester=='' && $session_role=='student'){?>
+          <a href="./complete_profile.php">
+              <div class="alert alert-warning" role="alert">
+                <strong>Your profile is not complete.</strong> Complete your profile now by clicking this alert.
+            </div>
+          </a>
+            <?}?>
+            
+            
           <!-- Card stats -->
         </div>
       </div>
     </div>
     <!-- Page content -->
     <div class="container-fluid mt--6">
-      <div class="row" id="courses">
-          <script>
-            var courses_lst = [];
-            var courses_id_lst = [];
-            </script>
-          <?
-          if ($result_courses->num_rows > 0)
-            { 
-                $i = 0;
-                while($row = $result_courses->fetch_assoc()) 
-                { 
-          ?>
-          <script>courses_lst[<?echo $i?>] = "<?echo $row['title']?>"</script>
-          <script>courses_id_lst[<?echo $i?>] = "<?echo $row['id']?>"</script>
-        <div class="col-xl-4 col-md-4 col-lg-4" id="<?echo $row['id']?>">
-          <div class="card">
-            <div class="card-body" style="padding:0px;border-radius:10px;">
-                <img style="width:100%;height:100%;border-radius:10px;" src="./uploads/<?echo $row['cover']?>" alt="<?echo $row['title']?>" />
-            </div>
-            <div class="card-footer bg-transparent">
-              <div class="row align-items-center">
-                <div class="col-md-10">
-                  <h6 class="text-uppercase text-muted ls-1 mb-1">By: <?echo $row['name']?></h6>
-                  <h5 class="h3 mb-0"><?echo $row['title']?></h5>
-                  
-                </div>
-                <?if($session_role=="student"){?>
-                    <?if($row['isEnroll']==''){?>
-                        <div class="col-md-2" style="float:right;right:20px;">
-                            <a href="./courseContent.php?courseId=<?echo $row['id']?>&enroll=yes" class="btn btn-sm btn-primary">Enroll</a>
-                        </div>
-                    <?}else{?>
-                        <div class="col-md-2" style="float:right;right:20px;">
-                            <a href="./courseContent.php?courseId=<?echo $row['id']?>" class="btn btn-sm btn-success">View</a>
-                        </div>
-                    <?}?>
-                <?}if($logged==0){?>
-                    <div class="col-md-2" style="float:right;right:20px;">
-                            <a href="./register.php" class="btn btn-sm btn-primary">Signin</a>
-                        </div>
-                <?}?>
-              </div>
-            </div>
-          </div>
-        </div>
-        <?$i +=1;}}?>
-      </div>
+        
+        
+    <?if($session_role!='uniadmin')
+    {?>    
+          <?if($askToExplore==0){?>
+          
+            <?
+            include("./phpParts/home_not_explore.php")?>
+            
+          <?}else if($askToExplore==1 && $session_portion!=''){?>
+          
+            <?include("./phpParts/home_explore.php")?>
+            
+          <?}else if($session_portion==''){?>
+          
+            <?include("./phpParts/home_choose_portion.php")?>
+          <?}?>
+          
+      <?}?>
       <!-- Footer -->
       <?include_once("./phpParts/footer.php")?>
     </div>
@@ -146,6 +230,75 @@ $result_courses = $con->query($query_courses);
                 
       }
   </script>
+  
+  
+  <script>
+      function searchQuery_dep(){
+          var search = document.getElementById("searchQuery_dep").value;
+          //console.log("srch", search)
+          
+          
+          //show all
+          found = 0;
+          for (var j = 0; j < departments_id_lst.length; j++) {
+                    $('#'+departments_id_lst[j]).show();
+                    
+                }
+        
+        if(search!=""){
+             for (var j = 0; j < departments_id_lst.length; j++) {
+                    $('#'+departments_id_lst[j]).hide();
+                    
+                }
+        }
+        //hide all
+          for (var i = 0; i < departments_lst.length; i++) {
+            if(departments_lst[i].toLowerCase().indexOf(search.toLowerCase()) != -1)
+            {
+                $('#'+departments_id_lst[i]).show();
+                /**
+                for (var j = 0; j < departments_id_lst.length; j++) {
+                    if(departments_id_lst[j]!=departments_id_lst[i]){
+                        $('#'+departments_id_lst[j]).hide();
+                    }
+                }
+                found = 1;
+                **/
+            }
+        }
+        /**
+        if(found==0){
+            for (var j = 0; j < departments_id_lst.length; j++) {
+                    $('#'+departments_id_lst[j]).show();
+                    
+                }
+        }
+        if(search==''){
+            for (var j = 0; j < departments_id_lst.length; j++) {
+                    $('#'+departments_id_lst[j]).show();
+                    
+                }
+        }
+        **/
+                
+                
+      }
+  </script>
+  
+  
+  <script>
+    $("#myModal").modal()
+    $(".container").hide();
+   
+   document.getElementById('myVideo').addEventListener('ended', closeModal, false);
+
+
+    function closeModal() {
+        $(".container").show();
+        $('#myModal').modal('hide');
+    }
+    </script>
+ 
 </body>
 
 </html>

@@ -4,7 +4,9 @@ if(isset($_POST['email'])&&isset($_POST['password'])){
     
     $errMsg="none";
     $name = mb_htmlentities(($_POST['name']));
+    $lname = mb_htmlentities(($_POST['lname']));
     $email = mb_htmlentities(($_POST['email']));
+    $university = mb_htmlentities(strtoupper($_POST['university']));
     $role = mb_htmlentities(($_POST['role']));
     $password = mb_htmlentities( md5(md5(sha1( $_POST['password'])).'Anomoz'));
     $query_selectedPost= "select * from pssec_users where email= '$email' and password='$password'"; 
@@ -20,6 +22,7 @@ if(isset($_POST['email'])&&isset($_POST['password'])){
             $_SESSION['name'] = $row['name'];
             $_SESSION['role'] = $row['role'];
             $_SESSION['password'] = $row['password'];
+            $_SESSION['university'] = ($row['university']);
             ?>
             <script type="text/javascript">
                 window.location = "./";
@@ -41,10 +44,28 @@ if(isset($_POST['email'])&&isset($_POST['password'])){
             
             $dateTime = time();
             $userId = intval((strval(1)).(strval(mt_rand(111111111, 999999999))));
-            $sql="insert into pssec_users (`name`,`email`, `password`, `role`) values ('$name','$email', '$password', '$role')";
+            
+            //check if uni exist
+            $query= "select * from pssec_users where university= '$university'"; 
+            $result = $con->query($query); 
+            if ($result->num_rows == 0)
+            { 
+                //send notf
+                $timeAdded = time();
+                $msg = 'New university '. $university.' added.';
+                $sql="insert into pssec_notifications(`studentId`, `content`, `timeAdded`, `url`) values ('1', '$msg', '$timeAdded', '#')";
+                if(!mysqli_query($con,$sql)){echo "notf err2";} 
+                
+            }
+            
+            
+            
+            
+            
+            $sql="insert into pssec_users (`name`, `lname`,`email`, `password`, `role`, `university`, `portion`) values ('$name','$lname', '$email', '$password', '$role', '$university', '$session_portion')";
             if(!mysqli_query($con,$sql))
             {
-                echo "err";
+                echo "err".mysqli_error($con);
             }
             else{
                  $_SESSION['email'] = $email;
@@ -64,6 +85,12 @@ else{
     1;
 }
 
+
+$query_university= "SELECT university FROM `pssec_universities` where portion='$session_portion' and university!='' group by university"; 
+$result_university = $con->query($query_university); 
+
+            
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -77,7 +104,7 @@ else{
   <nav id="navbar-main" class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
     <div class="container">
       <a class="navbar-brand" href="./">
-        <h3 style="font-size: 30px;color: white;">PSSEC</h3>
+        <h3 style="font-size: 30px;color: white;"><img src="assets/img/uni_logo.png" style="max-height: 60px;padding:1px;" class="navbar-brand-img" alt="Logo"></h3>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -99,21 +126,9 @@ else{
           </div>
         </div>
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a href="./" class="nav-link">
-              <span class="nav-link-inner--text">Dashboard</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="login.php" class="nav-link">
-              <span class="nav-link-inner--text">Login</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="register.php" class="nav-link">
-              <span class="nav-link-inner--text">Register</span>
-            </a>
-          </li>
+         
+         
+         
         </ul>
         <hr class="d-lg-none" />
       </div>
@@ -128,7 +143,6 @@ else{
           <div class="row justify-content-center">
             <div class="col-xl-5 col-lg-6 col-md-8 px-5">
               <h1 class="text-white">Create an account</h1>
-              <p class="text-lead text-white">Create your account and get access of hundereds of free courses.</p>
             </div>
           </div>
         </div>
@@ -152,9 +166,19 @@ else{
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                     </div>
-                    <input class="form-control" placeholder="Name" type="text" required name="name">
+                    <input class="form-control" placeholder="First Name" type="text" required name="name">
                   </div>
                 </div>
+                
+                <div class="form-group">
+                  <div class="input-group input-group-merge input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                    </div>
+                    <input class="form-control" placeholder="Last Name" type="text" required name="lname">
+                  </div>
+                </div>
+                
                 <div class="form-group">
                   <div class="input-group input-group-merge input-group-alternative mb-3">
                     <div class="input-group-prepend">
@@ -178,11 +202,52 @@ else{
                     </div>
                     <select name="role" class="form-control" id="exampleFormControlSelect1">
                       <option value="student">I am a Student</option>
-                      <option value="teacher">I am a Teacher</option>
+                      <option value="teacher">I am a <?if($session_portion=="University"){echo "Professor";}else{echo "Teacher";}?></option>
+                      <option value="uniadmin">I am an Admin</option>
                     </select>
                   </div>
                 </div>
+                <div class="form-group">
+                  <div class="input-group input-group-merge input-group-alternative">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-building"></i></span>
+                    </div>
+                    
+                    
+                     <input required placeholder="<?echo $session_portion?>" class="form-control" type="text" name="university" list="cityname">
+                        <datalist id="cityname" >
+                        <?if ($result_university->num_rows > 0)
+                            { 
+                                //successfull login
+                                while($row = $result_university->fetch_assoc()) 
+                                { ?>    
+                                    <option value="<?echo $row['university']?>">
+                             <?}
+                             }
+                             ?>
+                        </datalist>
+                        
+                        
+                    <!--
+                    <select required placeholder="<?echo $session_portion?>" class="form-control" type="text" name="university">
+                        <option value="">Select</option>
+                        <?if ($result_university->num_rows > 0)
+                            { 
+                                //successfull login
+                                while($row = $result_university->fetch_assoc()) 
+                                { ?>    
+                                    <option value="<?echo $row['university']?>"><?echo $row['university']?></option>
+                             <?}
+                             }
+                             ?>
+                    </select>
+                    -->
+                   
+                  </div>
+                </div>
+                <p style="font-size:10px;font-style: italic;">If you can't find your institution listed, please type the name in the box and we will add it to our list.</p>
                 
+                <!--
                 <div class="row my-4">
                   <div class="col-12">
                     <div class="custom-control custom-control-alternative custom-checkbox">
@@ -193,8 +258,16 @@ else{
                     </div>
                   </div>
                 </div>
+                -->
+                
+               
+                
                 <div class="text-center">
                   <input type="submit" class="btn btn-primary mt-4" value="Create account">
+                </div>
+                 <div class="text-center">
+                    <br>
+                    <a href="./login.php">Login</a> 
                 </div>
               </form>
             </div>

@@ -6,6 +6,7 @@
           &copy; 2020 <a href="https://www.anomoz.com?src=pssec-dev" class="font-weight-bold ml-1" target="_blank">Anomoz Softwares</a>
         </div>
       </div>
+      <!--
         <div class="col-lg-6">
         <ul class="nav nav-footer justify-content-center justify-content-lg-end">
           <li class="nav-item">
@@ -16,6 +17,7 @@
           </li>
         </ul>
       </div>
+      -->
       </div>
     </div>
   </footer>

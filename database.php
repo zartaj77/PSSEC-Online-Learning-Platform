@@ -1,9 +1,9 @@
 <?php
 
 $host='localhost';
-$username='anomozco_nooruser';
+$username='moinengi_pssec';
 $user_pass='rWg#M$vFYk]+';
-$database_in_use='anomozco_noor';
+$database_in_use='moinengi_pssec';
 
 $con = mysqli_connect($host,$username,$user_pass,$database_in_use);
 if (!$con)
